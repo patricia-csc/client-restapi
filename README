@@ -1,8 +1,4 @@
-POPA-MIHAI PATRICIA 323CB
-PC TEMA 3 - Client Web. Comunicatie cu REST API.
-
-In cadrul temei am implentat un client care interactioneaza cu un server 
-prin intermediul cererilor HTTP de tip GET, POST si DELETE.
+Client Web. Comunicatie cu REST API.
 
 Cererile HTTP sunt implementate in requests.c, unde este construita cererea 
 HTTP, cu URL, host, headere, cookies si mesajul propriu-zis.
