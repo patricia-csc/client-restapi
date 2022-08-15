@@ -1,0 +1,46 @@
+POPA-MIHAI PATRICIA 323CB
+PC TEMA 3 - Client Web. Comunicatie cu REST API.
+
+In cadrul temei am implentat un client care interactioneaza cu un server 
+prin intermediul cererilor HTTP de tip GET, POST si DELETE.
+
+Cererile HTTP sunt implementate in requests.c, unde este construita cererea 
+HTTP, cu URL, host, headere, cookies si mesajul propriu-zis.
+compute_get_request - genereaza mesaj HTTP request de tip GET;
+compute_post_request - genereaza mesaj HTTP request de tip POST;
+compute_delete_request - genereaza mesaj HTTP request de tip DELETE;
+
+Am utilizat biblioteca parson.h pentru a transforma inputul userului in format 
+JSON.
+Am utilizat urmatoatele functii din aceasta:
+json_value_init_object - initializaeaza un JSON_Value;
+json_value_get_object - intoarce un JSON_Object;
+json_object_set_string - adauga stringul dat intr-un JSON_Object;
+json_object_set_number - adauga numarul dat intr-un JSON_Object;
+json_serialize_to_string_pretty - transforma JSON_Object intr-un char* cu 
+                                  format JSON;
+
+Pentru cookieuri si headere am alocat un char ** cookies cu doua campuri. 
+Primul este destinat cookieului primit la autentificare (in urma comenzii 
+login), iar al doilea camp este destinat token-ului JWT primit la cererea 
+accesului in biblioteca (comanda enter_library). Lipsa headerului sau 
+cookieului (dupa caz) daca acesta este necesar va determina intoarcerea 
+unui mesaj de eroare din partea serverului. Pastrarea unui cookie sau 
+header se bazeaza pe primirea unui mesaj de tip HTTP/1.1 200 OK de la server.
+
+Programul ruleaza intr-o bucla infinita, asteptand inputuri de la utilizator. 
+Implementarea comenzii logout elibereaza memoria si seteaza pe NULL pointerii 
+pentru cookieurile si headerele utilizatorului. Astfel nu vor putea fi 
+utilizate comenzile de enter_library sau add/remove/get book/s cand 
+utilizatorul nu este logat, iar serverul va intoarce un mesaj de eroare.
+Implementarea comenzii exit se asigura ca toata memoria alocata a fost 
+eliberata si ca nu exista memory leaks.
+
+Conexiunea cu serverul, inchiderea conexiunii si respectiv trimiterea si 
+primirea de mesaje catre/de la server a fost implementata in helpers.c
+open_connection - deschide o conexiune cu serverul;
+error - printeaza eroarea si iese din program;
+compute_message - adauga \r\n necesar cererii HTTP;
+receive_from_server - primeste mesajul de la server;
+send_to_server - trimite mesajul la server;
+close_connection - inchide conexiunea cu serverul.
